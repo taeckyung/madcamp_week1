@@ -15,4 +15,5 @@ public class Tab2gallery extends Fragment {
 
         return rootView;
     }
+    private void insert
 }
