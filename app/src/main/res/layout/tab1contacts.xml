@@ -36,13 +36,13 @@
 
     </LinearLayout>
 
-        <android.support.design.widget.FloatingActionButton
+<!--        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="54dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="30dp"
             android:backgroundTint="#9500ff"
-            android:src="@android:drawable/ic_menu_add" />
+            android:src="@android:drawable/ic_menu_add" /> -->
     </FrameLayout>
 </RelativeLayout>
