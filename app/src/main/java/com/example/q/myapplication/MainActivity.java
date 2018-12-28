@@ -1,9 +1,13 @@
 package com.example.q.myapplication;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -31,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private final int MY_PERMISSIONS_REQUEST = 100;
+    private boolean isPermissionGranted = false;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -41,7 +47,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Permission request
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                                    Manifest.permission.READ_CONTACTS,
+                                                                    Manifest.permission.CALL_PHONE},
+                                                    MY_PERMISSIONS_REQUEST);
+        }
+        else
+            isPermissionGranted = true;
 
+        if (isPermissionGranted) {
+            processOnCreate();
+        }
+    }
+
+    public void processOnCreate() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
@@ -56,6 +80,34 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                isPermissionGranted = true;
+
+                if (grantResults.length <= 0) {
+                    isPermissionGranted = false;
+                }
+                for (int i = 0 ; i < grantResults.length ; i++)
+                {
+                    if (grantResults[i] != PackageManager.PERMISSION_GRANTED)
+                        isPermissionGranted = false;
+                }
+                if (isPermissionGranted)
+                    processOnCreate();
+                else {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.READ_CONTACTS,
+                                    Manifest.permission.CALL_PHONE},
+                            MY_PERMISSIONS_REQUEST);
+                }
+                return;
+            }
+        }
     }
 
 

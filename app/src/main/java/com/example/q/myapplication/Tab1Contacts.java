@@ -30,23 +30,6 @@ public class Tab1Contacts extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Permission request
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.READ_CONTACTS},
-                    100);
-        }
-
-        // Permission request
-        if (ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.CALL_PHONE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.CALL_PHONE},
-                    100);
-        }
     }
 
     @Override
@@ -148,6 +131,12 @@ public class Tab1Contacts extends Fragment {
                 int idIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID);
                 long currentId = cursor.getLong(idIndex);
                 Uri contactUri = ContactsContract.Contacts.getLookupUri(currentId, currentLookupKey);
+
+                // Modify the phone number string to look great!
+                if (phoneNumber.contains("010") && !phoneNumber.contains("-")) {
+                    phoneNumber = new StringBuilder(phoneNumber).insert(3, "-").toString();
+                    phoneNumber = new StringBuilder(phoneNumber).insert(phoneNumber.length()-4, "-").toString();
+                }
 
                 Profile profile = new Profile(name, phoneNumber, email, contactUri);
                 _profiles_data.add(profile);
