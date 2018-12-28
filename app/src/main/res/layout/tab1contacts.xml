@@ -5,74 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:text="Contacts Information"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="bokyung cha"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/PhoneNumber"
-        android:layout_width="132dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
-        android:layout_toStartOf="@+id/Email"
-        android:layout_toLeftOf="@+id/Email"
-        android:layout_toEndOf="@+id/Name"
-        android:layout_toRightOf="@+id/Name"
-        android:gravity="center"
-        android:text="01044685779"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/Email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:gravity="center"
-        android:text="lcbk_0321@dgist.ac.kr"
-        android:textSize="15sp" />
-
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/Name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" />
+    <ListView
+        android:id="@+id/listview1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

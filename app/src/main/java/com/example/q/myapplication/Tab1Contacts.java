@@ -13,16 +13,18 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class Tab1Contacts extends Fragment {
-    public TextView NameText;
-    public TextView PhoneNumberText;
-    public TextView EmailText;
+    public ArrayList _profiles;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _profiles = new ArrayList();
 
         // Permission request
         while (ContextCompat.checkSelfPermission(getActivity(),
@@ -55,21 +57,18 @@ public class Tab1Contacts extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.tab1contacts,
-                container,
-                false);
-        NameText  =  view.findViewById(R.id.Name);
-        PhoneNumberText = view.findViewById(R.id.PhoneNumber);
-        EmailText= view.findViewById(R.id.Email);
+        View view = inflater.inflate(R.layout.tab1contacts, container, false);
 
         fetchContacts();
+
+        ProfileListAdapter adapter = new ProfileListAdapter(getActivity(), R.layout.profileview, _profiles);
+
+        ListView listView =  view.findViewById(R.id.listview1);
+        listView.setAdapter(adapter);
         return view;
     }
 
     public void fetchContacts() {
-
-        String phoneNumber;
-        String email;
 
         Uri CONTENT_URI = ContactsContract.Contacts.CONTENT_URI;
         String _ID = ContactsContract.Contacts._ID;
@@ -84,16 +83,9 @@ public class Tab1Contacts extends Fragment {
         String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
         String DATA = ContactsContract.CommonDataKinds.Email.DATA;
 
-        StringBuffer output1 = new StringBuffer();
-        StringBuffer output2 = new StringBuffer();
-        StringBuffer output3 = new StringBuffer();
-
         ContentResolver contentResolver = getActivity().getContentResolver();
 
         Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
-        output1.append("Name\n");
-        output2.append("Phone number\n");
-        output3.append("Email\n");
 
         // Loop for every contact in the phone
         if (cursor.getCount() > 0) {
@@ -102,21 +94,17 @@ public class Tab1Contacts extends Fragment {
 
                 String contact_id = cursor.getString(cursor.getColumnIndex( _ID ));
                 String name = cursor.getString(cursor.getColumnIndex( DISPLAY_NAME ));
+                String phoneNumber = "";
+                String email = "";
 
                 int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex( HAS_PHONE_NUMBER )));
 
                 if (hasPhoneNumber > 0) {
-
-                    output1.append("\n" + name);
-
                     // Query and loop for every phone number of the contact
                     Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
 
                     while (phoneCursor.moveToNext()) {
                         phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                        output2.append("\n" + phoneNumber);
-                        output3.append("\n");
-
                     }
 
                     phoneCursor.close();
@@ -125,25 +113,15 @@ public class Tab1Contacts extends Fragment {
                     Cursor emailCursor = contentResolver.query(EmailCONTENT_URI,	null, EmailCONTACT_ID+ " = ?", new String[] { contact_id }, null);
 
                     while (emailCursor.moveToNext()) {
-
                         email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
-
-                        output3.append(email);
-
                     }
 
                     emailCursor.close();
                 }
 
-                output1.append("\n");
-                output2.append("\n");
-                output3.append("\n");
+                Profile profile = new Profile(name, phoneNumber, email);
+                _profiles.add(profile);
             }
-
-            NameText.setText(output1);
-            PhoneNumberText.setText(output2);
-            EmailText.setText(output3);
         }
     }
-
 }
