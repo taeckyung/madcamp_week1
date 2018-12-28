@@ -10,46 +10,42 @@ import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Tab1Contacts extends Fragment {
-    public ArrayList _profiles;
+    public ArrayList<Profile> _profiles_data;
+    public ArrayList<Profile> _profiles_show;
+    private ProfileListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Permission request
-        while (ContextCompat.checkSelfPermission(getActivity(),
+        if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.READ_CONTACTS)
                 != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_CONTACTS},
+                    100);
+        }
 
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.READ_CONTACTS)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        100);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
+        // Permission request
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.CALL_PHONE},
+                    100);
         }
     }
 
@@ -57,14 +53,43 @@ public class Tab1Contacts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.tab1contacts, container, false);
-        _profiles = new ArrayList();
-        fetchContacts();
+        _profiles_data = new ArrayList();
+        _profiles_show = new ArrayList();
 
-        ProfileListAdapter adapter = new ProfileListAdapter(getActivity(), R.layout.profileview, _profiles);
+        adapter = new ProfileListAdapter(getActivity(), R.layout.profileview, _profiles_show);
 
         ListView listView =  view.findViewById(R.id.listview1);
         listView.setAdapter(adapter);
+
+        final EditText listSearch = view.findViewById(R.id.listSearch);
+        listSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = listSearch.getText().toString();
+                search(text);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        _profiles_data.clear();
+        _profiles_show.clear();
+        fetchContacts();
+        adapter.notifyDataSetChanged();
     }
 
     public void fetchContacts() {
@@ -109,7 +134,7 @@ public class Tab1Contacts extends Fragment {
                     phoneCursor.close();
 
                     // Query and loop for every email of the contact
-                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI,	null, EmailCONTACT_ID+ " = ?", new String[] { contact_id }, null);
+                    Cursor emailCursor = contentResolver.query(EmailCONTENT_URI,null, EmailCONTACT_ID+ " = ?", new String[] { contact_id }, null);
 
                     while (emailCursor.moveToNext()) {
                         email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
@@ -118,9 +143,38 @@ public class Tab1Contacts extends Fragment {
                     emailCursor.close();
                 }
 
-                Profile profile = new Profile(name, phoneNumber, email);
-                _profiles.add(profile);
+                int lookupKeyIndex = cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY);
+                String currentLookupKey = cursor.getString(lookupKeyIndex);
+                int idIndex = cursor.getColumnIndex(ContactsContract.Contacts._ID);
+                long currentId = cursor.getLong(idIndex);
+                Uri contactUri = ContactsContract.Contacts.getLookupUri(currentId, currentLookupKey);
+
+                Profile profile = new Profile(name, phoneNumber, email, contactUri);
+                _profiles_data.add(profile);
             }
         }
+        Collections.sort(_profiles_data, new CompareProfile());
+        _profiles_show.addAll(_profiles_data);
     }
+
+    public void search(String targetText) {
+        _profiles_show.clear();
+        targetText = targetText.toLowerCase();
+
+        if (targetText.length() == 0) {
+            _profiles_show.addAll(_profiles_data);
+        }
+        else {
+            for (int i = 0 ; i < _profiles_data.size() ; i++) {
+                if (_profiles_data.get(i).getName().toLowerCase().contains(targetText) ||
+                        _profiles_data.get(i).getPhone().toLowerCase().replace("-","").contains(targetText) ||
+                        _profiles_data.get(i).getEmail().toLowerCase().contains(targetText) ) {
+
+                    _profiles_show.add(_profiles_data.get(i));
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 }
