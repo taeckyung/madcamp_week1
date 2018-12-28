@@ -18,21 +18,53 @@
         android:text="Contacts Information" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignRight="@+id/textView"
         android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/PhoneNumber"
+        android:layout_width="132dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Name"
+        android:layout_marginStart="17dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginBottom="-2dp"
+        android:layout_toStartOf="@+id/Email"
+        android:layout_toLeftOf="@+id/Email"
+        android:layout_toEndOf="@+id/Name"
+        android:layout_toRightOf="@+id/Name"
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/Email"
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Name"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="0dp"
+        android:text="TextView"
+        android:textSize="18sp" />
 
     <ProgressBar
         android:id="@+id/progressBar1"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
+        android:layout_above="@+id/Name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" />
 

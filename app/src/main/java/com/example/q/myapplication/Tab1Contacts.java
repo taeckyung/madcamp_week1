@@ -16,7 +16,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class Tab1Contacts extends Fragment {
-    public TextView outputText;
+    public TextView NameText;
+    public TextView PhoneNumberText;
+    public TextView EmailText;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,10 @@ public class Tab1Contacts extends Fragment {
         View view = inflater.inflate(R.layout.tab1contacts,
                 container,
                 false);
-        outputText  =  view.findViewById(R.id.textView1);
+        NameText  =  view.findViewById(R.id.Name);
+        PhoneNumberText = view.findViewById(R.id.PhoneNumber);
+        EmailText= view.findViewById(R.id.Email);
+
         fetchContacts();
         return view;
     }
@@ -79,12 +84,17 @@ public class Tab1Contacts extends Fragment {
         String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
         String DATA = ContactsContract.CommonDataKinds.Email.DATA;
 
-        StringBuffer output = new StringBuffer();
+        StringBuffer output1 = new StringBuffer();
+        StringBuffer output2 = new StringBuffer();
+        StringBuffer output3 = new StringBuffer();
 
 
         ContentResolver contentResolver = getActivity().getContentResolver();
 
         Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
+        output1.append("Name\n");
+        output2.append("Phone number\n");
+        output3.append("Email\n");
 
         // Loop for every contact in the phone
         if (cursor.getCount() > 0) {
@@ -98,14 +108,15 @@ public class Tab1Contacts extends Fragment {
 
                 if (hasPhoneNumber > 0) {
 
-                    output.append("\n Name:" + name);
+                    output1.append("\n" + name);
 
                     // Query and loop for every phone number of the contact
                     Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
 
                     while (phoneCursor.moveToNext()) {
                         phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                        output.append("\n Phone number:" + phoneNumber);
+                        output2.append("\n" + phoneNumber);
+                        output3.append("\n");
 
                     }
 
@@ -118,17 +129,21 @@ public class Tab1Contacts extends Fragment {
 
                         email = emailCursor.getString(emailCursor.getColumnIndex(DATA));
 
-                        output.append("\nEmail:" + email);
+                        output3.append(email);
 
                     }
 
                     emailCursor.close();
                 }
 
-                output.append("\n");
+                output1.append("\n");
+                output2.append("\n");
+                output3.append("\n");
             }
 
-            outputText.setText(output);
+            NameText.setText(output1);
+            PhoneNumberText.setText(output2);
+            EmailText.setText(output3);
         }
     }
 
