@@ -2,6 +2,7 @@ package com.example.q.myapplication;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 
 public class Tab2gallery extends Fragment {
 
-    private ArrayList<String> images;
+    public ArrayList<String> images;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,13 +70,26 @@ public class Tab2gallery extends Fragment {
         GridView gallery = view.findViewById(R.id.galleryView);
         ImageAdapter adapter= new ImageAdapter(getActivity());
         gallery.setAdapter(adapter);
+        gallery.setOnItemClickListener(new OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                // Sending image id to FullScreenActivity
+                Intent i = new Intent(getActivity().getApplicationContext(), Full_Image.class);
+                // passing array index
+                i.putExtra("array",images);
+                i.putExtra("position", position);
+                startActivity(i);
+            }
+        });
+
         return view;
     }
 
-    private class ImageAdapter extends BaseAdapter {
+    public class ImageAdapter extends BaseAdapter {
 
         /** The context. */
-        private Activity context;
+        public Activity context;
 
         /**
          * Instantiates a new image adapter.
@@ -126,7 +141,7 @@ public class Tab2gallery extends Fragment {
          *            the activity
          * @return ArrayList with images Path
          */
-        private ArrayList<String> getAllShownImagesPath(Activity activity) {
+        public ArrayList<String> getAllShownImagesPath(Activity activity) {
             Uri uri;
             Cursor cursor;
             int column_index_data, column_index_folder_name;
