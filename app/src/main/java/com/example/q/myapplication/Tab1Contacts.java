@@ -24,7 +24,6 @@ public class Tab1Contacts extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _profiles = new ArrayList();
 
         // Permission request
         while (ContextCompat.checkSelfPermission(getActivity(),
@@ -58,7 +57,7 @@ public class Tab1Contacts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.tab1contacts, container, false);
-
+        _profiles = new ArrayList();
         fetchContacts();
 
         ProfileListAdapter adapter = new ProfileListAdapter(getActivity(), R.layout.profileview, _profiles);
