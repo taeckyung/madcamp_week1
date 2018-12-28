@@ -88,7 +88,6 @@ public class Tab1Contacts extends Fragment {
         StringBuffer output2 = new StringBuffer();
         StringBuffer output3 = new StringBuffer();
 
-
         ContentResolver contentResolver = getActivity().getContentResolver();
 
         Cursor cursor = contentResolver.query(CONTENT_URI, null,null, null, null);
