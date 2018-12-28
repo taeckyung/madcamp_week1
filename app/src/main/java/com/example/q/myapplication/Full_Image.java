@@ -29,8 +29,11 @@ public class Full_Image extends AppCompatActivity {
         ArrayList<String> images=i.getExtras().getStringArrayList("array");
 
         Glide.with(this).load(images.get(id)).apply(new RequestOptions()
-                .placeholder(R.drawable.ic_launcher_background).centerCrop())
+                .placeholder(R.drawable.ic_launcher_background).fitCenter())
                 .into(imageView);
+        imageView.setAdjustViewBounds(true);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
 
     }
 
