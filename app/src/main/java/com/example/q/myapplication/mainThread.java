@@ -1,5 +1,6 @@
 package com.example.q.myapplication;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 
@@ -65,7 +66,7 @@ public class mainThread extends Thread {
                 averageFPS = 1000 / ((totalTime / frameCount) / 1000000);
                 frameCount = 0;
                 totalTime = 0;
-                System.out.println(averageFPS);
+                //System.out.println(averageFPS);
             }
         }
     }
