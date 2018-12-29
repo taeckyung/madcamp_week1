@@ -183,7 +183,4 @@ public class Tab1Contacts extends Fragment implements ProfileListAdapter.EventLi
         }
         adapter.notifyDataSetChanged();
     }
-
-    private class FloatingActionButton {
-    }
 }
