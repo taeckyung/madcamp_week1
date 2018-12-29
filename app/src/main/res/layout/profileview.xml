@@ -21,59 +21,76 @@
         a:layout_width="match_parent"
         a:layout_height="match_parent"
         a:layout_weight="1"
-        a:orientation="vertical">
+        a:orientation="horizontal">
 
         <LinearLayout
-            a:id="@+id/phone_layout"
             a:layout_width="match_parent"
-            a:layout_height="30dp"
+            a:layout_height="match_parent"
             a:layout_weight="1"
-            a:orientation="horizontal">
+            a:orientation="vertical">
 
-            <TextView
-                a:id="@+id/phone_text"
-                a:layout_width="100dp"
-                a:layout_height="match_parent"
-                a:layout_weight="1"
-                a:gravity="center_vertical"
-                a:text="@string/phone_text"
-                a:textSize="14sp" />
-
-            <TextView
-                a:id="@+id/phone"
+            <LinearLayout
+                a:id="@+id/phone_layout"
                 a:layout_width="match_parent"
-                a:layout_height="match_parent"
+                a:layout_height="30dp"
                 a:layout_weight="1"
-                a:gravity="center_vertical"
-                a:text="TextView" />
+                a:orientation="horizontal">
 
+                <TextView
+                    a:id="@+id/phone_text"
+                    a:layout_width="100dp"
+                    a:layout_height="match_parent"
+                    a:layout_weight="1"
+                    a:gravity="center_vertical"
+                    a:text="@string/phone_text"
+                    a:textSize="14sp" />
+
+                <TextView
+                    a:id="@+id/phone"
+                    a:layout_width="match_parent"
+                    a:layout_height="match_parent"
+                    a:layout_weight="1"
+                    a:gravity="center_vertical"
+                    a:text="TextView" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                a:id="@+id/email_layout"
+                a:layout_width="match_parent"
+                a:layout_height="30dp"
+                a:layout_weight="1"
+                a:orientation="horizontal">
+
+                <TextView
+                    a:id="@+id/email_text"
+                    a:layout_width="100dp"
+                    a:layout_height="match_parent"
+                    a:layout_weight="1"
+                    a:gravity="center_vertical"
+                    a:text="@string/email_text"
+                    a:textSize="14sp" />
+
+                <TextView
+                    a:id="@+id/email"
+                    a:layout_width="match_parent"
+                    a:layout_height="match_parent"
+                    a:layout_weight="1"
+                    a:gravity="center_vertical"
+                    a:text="TextView" />
+
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            a:id="@+id/email_layout"
-            a:layout_width="match_parent"
-            a:layout_height="30dp"
+        <TextView
+            a:id="@+id/deleteButton"
+            a:layout_width="40dp"
+            a:layout_height="match_parent"
             a:layout_weight="1"
-            a:orientation="horizontal">
+            a:gravity="center"
+            a:text="@string/delete"
+            a:textSize="24sp" />
 
-            <TextView
-                a:id="@+id/email_text"
-                a:layout_width="100dp"
-                a:layout_height="match_parent"
-                a:layout_weight="1"
-                a:gravity="center_vertical"
-                a:text="@string/email_text"
-                a:textSize="14sp" />
-
-            <TextView
-                a:id="@+id/email"
-                a:layout_width="match_parent"
-                a:layout_height="match_parent"
-                a:layout_weight="1"
-                a:gravity="center_vertical"
-                a:text="TextView" />
-
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

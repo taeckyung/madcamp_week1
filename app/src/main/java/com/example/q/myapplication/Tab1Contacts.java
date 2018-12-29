@@ -2,17 +2,20 @@ package com.example.q.myapplication;
 
 import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -21,7 +24,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Tab1Contacts extends Fragment {
+public class Tab1Contacts extends Fragment implements ProfileListAdapter.EventListener {
     public ArrayList<Profile> _profiles_data;
     public ArrayList<Profile> _profiles_show;
     private ProfileListAdapter adapter;
@@ -39,7 +42,7 @@ public class Tab1Contacts extends Fragment {
         _profiles_data = new ArrayList();
         _profiles_show = new ArrayList();
 
-        adapter = new ProfileListAdapter(getActivity(), R.layout.profileview, _profiles_show);
+        adapter = new ProfileListAdapter(getActivity(), this, R.layout.profileview, _profiles_show);
 
         ListView listView =  view.findViewById(R.id.listview1);
         listView.setAdapter(adapter);
@@ -63,16 +66,31 @@ public class Tab1Contacts extends Fragment {
             }
         });
 
+        final android.support.design.widget.FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                    Intent contactIntent = new Intent(Intent.ACTION_INSERT);
+                    contactIntent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+                    startActivity(contactIntent);
+                    return false;
+            }
+        });
+
         return view;
+    }
+
+    public void reloadContacts() {
+        _profiles_data.clear();
+        _profiles_show.clear();
+        fetchContacts();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        _profiles_data.clear();
-        _profiles_show.clear();
-        fetchContacts();
-        adapter.notifyDataSetChanged();
+        reloadContacts();
     }
 
     public void fetchContacts() {
@@ -166,4 +184,6 @@ public class Tab1Contacts extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    private class FloatingActionButton {
+    }
 }
