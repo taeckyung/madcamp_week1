@@ -8,4 +8,5 @@
     <string name="phone_text">Phone:</string>
     <string name="email_text">E-mail:</string>
     <string name="search_hint">Search...</string>
+    <string name="delete">×</string>
 </resources>

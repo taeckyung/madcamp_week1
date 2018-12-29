@@ -8,41 +8,49 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
 
-        <EditText
-            android:id="@+id/listSearch"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="@string/search_hint"
-            android:inputType="text"
-            android:paddingLeft="10dp" />
-
-        <ListView
-            android:id="@+id/listview1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true">
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
 
-        </ListView>
+            <EditText
+                android:id="@+id/listSearch"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:hint="@string/search_hint"
+                android:inputType="text"
+                android:paddingLeft="10dp" />
 
-    </LinearLayout>
+            <ListView
+                android:id="@+id/listview1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true">
 
-<!--        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="54dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="30dp"
-            android:backgroundTint="#9500ff"
-            android:src="@android:drawable/ic_menu_add" /> -->
+            </ListView>
+
+        </LinearLayout>
+
     </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="80dp"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/colorPrimary" />
 </RelativeLayout>
