@@ -141,7 +141,7 @@ public class Tab2gallery extends Fragment {
             }
 
             Glide.with(context).load(images.get(position)).apply(new RequestOptions()
-                    .placeholder(R.drawable.ic_launcher_background).centerCrop())
+                    .placeholder(R.drawable.ic_launcher_foreground).centerCrop())
                     .into(picturesView);
 
             return picturesView;
