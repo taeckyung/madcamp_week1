@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.MainThread;
 import android.view.MotionEvent;
@@ -19,11 +20,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private ppBall ball;
     private CharacterSprite plateA;
     private CharacterSprite loseA;
+    private Paint paint;
     private boolean onPlateA;
     private boolean gameStarted;
-    private boolean playerALose;
+    private int playerLose;
     private int screenWidth;
     private int screenHeight;
+    private int averageFPS;
+    private long startTime;
 
     public GameView(Context context) {
         super(context);
@@ -40,6 +44,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         loseA = new CharacterSprite(BitmapFactory.decodeResource(getResources(),R.drawable.player_one_lose));
         loseA.setXY(screenWidth/2, screenHeight/2);
 
+        paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(60);
+
         setFocusable(true);
     }
 
@@ -48,7 +56,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         plateA.setXY(screenWidth/2, screenHeight - 200);
         onPlateA = false;
         gameStarted = false;
-        playerALose = false;
+        averageFPS = 0;
+        playerLose = 0;
     }
 
     @Override
@@ -77,13 +86,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void update() {
-        if (ball.gameOver1()) {
-            init_game();
-            playerALose = true;
-        }
-        else if (gameStarted) {
+    public void update(double _averageFPS) {
+        if (gameStarted) {
+            averageFPS = (int)_averageFPS;
             ball.update(plateA);
+            int temp;
+            if ((temp = ball.gameOver()) != 0) {
+                init_game();
+                playerLose = temp;
+            }
         }
     }
 
@@ -91,11 +102,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (canvas != null) {
-            if (!playerALose) {
+            if (playerLose == 0) {
                 ball.draw(canvas);
                 plateA.draw(canvas);
+                int fps = gameStarted ? averageFPS : 0;
+                long time = gameStarted ? (System.nanoTime() - startTime) / 1000000000 : 0;
+                canvas.drawText("FPS: "+Integer.toString(fps),200, screenHeight/2, paint);
+                canvas.drawText("Time: " + Long.toString(time), screenWidth - 400, screenHeight / 2, paint);
             }
-            else {
+            else if (playerLose == 1) {
                 loseA.draw(canvas);
             }
         }
@@ -104,12 +119,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     // Return false for handling the touch input only in this function.
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (playerALose) {
-            playerALose = false;
+        if (playerLose != 0) {
+            playerLose = 0;
             return false;
         }
         else if (!gameStarted) {
             gameStarted = true;
+            startTime = System.nanoTime();
             return false;
         }
 

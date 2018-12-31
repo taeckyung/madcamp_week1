@@ -74,8 +74,10 @@ public class ppBall extends CharacterSprite {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
-    public boolean gameOver1() {
-        return y + radius >= screenHeight;
+    public int gameOver() {
+        if (y + radius >= screenHeight) return 1;
+        //else if (y <= radius) return 2;
+        else return 0;
     }
 
     public int getRadius() { return radius; }
