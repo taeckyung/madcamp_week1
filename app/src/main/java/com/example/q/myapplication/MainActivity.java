@@ -50,10 +50,12 @@ public class MainActivity extends AppCompatActivity {
         // Permission request
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
                                                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                                                     Manifest.permission.WRITE_CONTACTS,
+                                                                    Manifest.permission.READ_CONTACTS,
                                                                     Manifest.permission.CALL_PHONE},
                                                     MY_PERMISSIONS_REQUEST);
         }
@@ -102,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                     Manifest.permission.WRITE_CONTACTS,
+                                    Manifest.permission.READ_CONTACTS,
                                     Manifest.permission.CALL_PHONE},
                             MY_PERMISSIONS_REQUEST);
                 }

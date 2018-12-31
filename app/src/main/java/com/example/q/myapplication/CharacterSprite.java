@@ -1,5 +1,6 @@
 package com.example.q.myapplication;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
@@ -12,7 +13,7 @@ public class CharacterSprite {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(image, x - image.getWidth()/2,  y - image.getHeight()/2, null);
+        canvas.drawBitmap(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
     }
 
     public void setXY(int x_, int y_) {

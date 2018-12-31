@@ -6,8 +6,8 @@ import android.graphics.Bitmap;
 import java.util.Random;
 
 public class ppBall extends CharacterSprite {
-    private int xVelocity = 75;
-    private int yVelocity = 75;
+    private int xVelocity = 35;
+    private int yVelocity = 35;
     private int radius = image.getWidth()/2;
     private int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
     private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
@@ -22,7 +22,7 @@ public class ppBall extends CharacterSprite {
         yVelocity *= randY;
     }
 
-    public void update(CharacterSprite plateA) {
+    public void update(CharacterSprite plateA, CharacterSprite plateB) {
         x += xVelocity;
         y += yVelocity;
 
@@ -40,8 +40,7 @@ public class ppBall extends CharacterSprite {
             hadCollideWall = true;
         }
 
-        if (isCollide(plateA) && hadCollideWall) {
-            yVelocity *= -1;
+        if ((isCollide(plateA) || isCollide(plateB)) && hadCollideWall) {
             hadCollideWall = false;
         }
     }
@@ -52,18 +51,24 @@ public class ppBall extends CharacterSprite {
         int upperBound = plate.getY() - plate.getHeight()/2;
         int lowerBound = plate.getY() + plate.getHeight()/2;
 
-        // Case 1: Circle collide on the corner of the plate.
-        if (dist(x, y, leftBound, upperBound) <= radius ||
-                dist(x, y, leftBound, lowerBound) <= radius ||
-                dist(x, y, rightBound, upperBound) <= radius ||
-                dist(x, y, rightBound, lowerBound) <= radius) {
+        if ((upperBound - y <= radius) && (upperBound >= y) && (x + radius >= leftBound) && (x - radius <= rightBound)) {
+            y = upperBound - radius;
+            yVelocity *= -1;
             return true;
         }
-
-        // Case 2: Circle collide through the edge of the plate.
-        if ((((upperBound - y) <= radius && (upperBound >= y)) ||
-                ((y - lowerBound) <= radius && (lowerBound <= y))) &&
-                x >= leftBound && x <= rightBound) {
+        else if ((y - lowerBound <= radius) && (lowerBound <= y) && (x + radius >= leftBound) && (x - radius <= rightBound)) {
+            y = lowerBound + radius;
+            yVelocity *= -1;
+            return true;
+        }
+        else if ((leftBound - x <= radius) && (x <= leftBound) && (y + radius >= upperBound) && (y - radius <= lowerBound)) {
+            x = leftBound - radius;
+            xVelocity *= -1;
+            return true;
+        }
+        else if ((x - rightBound <= radius) && (rightBound <= x) && (y + radius >= upperBound) && (y - radius <= lowerBound)) {
+            x = rightBound + radius;
+            xVelocity *= -1;
             return true;
         }
 
@@ -76,7 +81,7 @@ public class ppBall extends CharacterSprite {
 
     public int gameOver() {
         if (y + radius >= screenHeight) return 1;
-        //else if (y <= radius) return 2;
+        else if (y <= radius) return 2;
         else return 0;
     }
 

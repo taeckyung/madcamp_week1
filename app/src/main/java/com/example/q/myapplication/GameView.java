@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.annotation.MainThread;
+import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
@@ -17,13 +19,20 @@ import static java.lang.Thread.sleep;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private mainThread thread;
+
     private ppBall ball;
     private CharacterSprite plateA;
-    private CharacterSprite loseA;
-    private Paint paint;
+    private CharacterSprite plateB;
     private boolean onPlateA;
+    private boolean onPlateB;
+    private int idPlateA;
+    private int idPlateB;
+    private Paint paint;
+    private Paint paintBig;
+
     private boolean gameStarted;
     private int playerLose;
+
     private int screenWidth;
     private int screenHeight;
     private int averageFPS;
@@ -40,14 +49,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         thread = new mainThread(getHolder(), this);
 
         ball = new ppBall(BitmapFactory.decodeResource(getResources(),R.drawable.ball));
-        plateA = new CharacterSprite(BitmapFactory.decodeResource(getResources(),R.drawable.plate));
-
-        loseA = new CharacterSprite(BitmapFactory.decodeResource(getResources(),R.drawable.player_one_lose));
-        loseA.setXY(screenWidth/2, screenHeight/2);
+        plateA = new CharacterSprite(BitmapFactory.decodeResource(getResources(),R.drawable.plate_a));
+        plateB = new CharacterSprite(BitmapFactory.decodeResource(getResources(),R.drawable.plate_b));
 
         paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(60);
+        paint.setTypeface(Typeface.MONOSPACE);
+
+        paintBig = new Paint();
+        paintBig.setColor(Color.WHITE);
+        paintBig.setTextSize(200);
+        paintBig.setTypeface(Typeface.MONOSPACE);
 
         setFocusable(true);
     }
@@ -55,7 +68,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void init_game() {
         ball.setXY(screenWidth/2, screenHeight/2);
         plateA.setXY(screenWidth/2, screenHeight - 200);
+        plateB.setXY(screenWidth/2, 200);
         onPlateA = false;
+        onPlateB = false;
         gameStarted = false;
         averageFPS = 0;
         playerLose = 0;
@@ -90,7 +105,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void update(double _averageFPS) {
         if (gameStarted) {
             averageFPS = (int)_averageFPS;
-            ball.update(plateA);
+            ball.update(plateA, plateB);
             int temp;
             if ((temp = ball.gameOver()) != 0) {
                 init_game();
@@ -104,51 +119,113 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         if (canvas != null) {
             if (playerLose == 0) {
-                ball.draw(canvas);
-                plateA.draw(canvas);
                 int fps = gameStarted ? averageFPS : 0;
                 timeElapsed = gameStarted ? (System.nanoTime() - startTime) / 1000000000 : 0;
-                canvas.drawText("FPS: "+Integer.toString(fps),200, screenHeight/2, paint);
-                canvas.drawText("Time: " + Long.toString(timeElapsed), screenWidth - 400, screenHeight / 2, paint);
+                canvas.drawText("FPS: "+Integer.toString(fps),
+                                200, screenHeight/2, paint);
+                canvas.drawText("Time: " + Long.toString(timeElapsed),
+                                screenWidth - 450, screenHeight / 2, paint);
+                ball.draw(canvas);
+                plateA.draw(canvas);
+                plateB.draw(canvas);
             }
-            else if (playerLose == 1) {
-                //canvas.drawText("PLAYER\nTWO\nWIN!\n\n"+Long.toString(timeElapsed)+" sec", screenWidth/2, screenHeight/2,paint);
-                loseA.draw(canvas);
+            else {
+                canvas.drawText("GAME OVER",
+                                screenWidth/2-550, screenHeight/2-50, paintBig);
+                canvas.drawText("Playtime: "+Long.toString(timeElapsed)+"s",
+                                screenWidth/2-250, screenHeight/2+100, paint);
             }
         }
     }
 
-    // Return false for handling the touch input only in this function.
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (playerLose != 0) {
-            playerLose = 0;
-            return false;
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                playerLose = 0;
+            }
+            return true;
         }
         else if (!gameStarted) {
-            gameStarted = true;
-            startTime = System.nanoTime();
-            return false;
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                gameStarted = true;
+                startTime = System.nanoTime();
+            }
+            return true;
         }
 
-        int keyAction = event.getAction();
-        int eventX = (int)event.getX();
-        int eventY = (int)event.getY();
+        int pointer_count = event.getPointerCount();
+        pointer_count = pointer_count > 2 ? 2 : pointer_count;
 
-        switch (keyAction) {
+        int eventX, eventY;
+        int action = event.getActionMasked();
+
+        switch (action) {
             case MotionEvent.ACTION_DOWN:
+                eventX = (int)event.getX();
+                eventY = (int)event.getY();
                 if (plateA.isInside(eventX, eventY)) {
                     onPlateA = true;
+                    idPlateA = event.getPointerId(0);
+                }
+                else if (plateB.isInside(eventX, eventY)) {
+                    onPlateB = true;
+                    idPlateB = event.getPointerId(0);
+                }
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                for (int i = 0 ; i < pointer_count ; i++) {
+                    eventX = (int)event.getX(i);
+                    eventY = (int)event.getY(i);
+                    if (plateA.isInside(eventX, eventY)) {
+                        onPlateA = true;
+                        idPlateA = event.getPointerId(i);
+                    }
+                    else if (plateB.isInside(eventX, eventY)) {
+                        onPlateB = true;
+                        idPlateB = event.getPointerId(i);
+                    }
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (onPlateA) {
-                    plateA.setXY(eventX, eventY);
+                for (int i = 0 ; i < pointer_count ; i++) {
+                    int currId = event.getPointerId(i);
+                    eventX = (int)event.getX(i);
+                    eventY = (int)event.getY(i);
+
+                    if (onPlateA && (idPlateA == currId)) {
+                        plateA.setXY(eventX, eventY);
+                    }
+                    else if (onPlateB && (idPlateB == currId)) {
+                        plateB.setXY(eventX,eventY);
+                    }
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                onPlateA = false;
+                for (int i = 0 ; i < pointer_count ; i++) {
+                    int currId = event.getPointerId(i);
+
+                    if (onPlateA && (idPlateA == currId)) {
+                        onPlateA = false;
+                    }
+                    else if (onPlateB && (idPlateB == currId)) {
+                        onPlateB = false;
+                    }
+                }
                 break;
+            case MotionEvent.ACTION_POINTER_UP:
+                for (int i = 0 ; i < pointer_count ; i++) {
+                    int currId = event.getPointerId(i);
+
+                    if (onPlateA && (idPlateA == currId)) {
+                        onPlateA = false;
+                    }
+                    else if (onPlateB && (idPlateB == currId)) {
+                        onPlateB = false;
+                    }
+                }
+                break;
+
         }
         return true;
     }
