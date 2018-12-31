@@ -28,6 +28,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private int screenHeight;
     private int averageFPS;
     private long startTime;
+    private long timeElapsed;
 
     public GameView(Context context) {
         super(context);
@@ -106,11 +107,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 ball.draw(canvas);
                 plateA.draw(canvas);
                 int fps = gameStarted ? averageFPS : 0;
-                long time = gameStarted ? (System.nanoTime() - startTime) / 1000000000 : 0;
+                timeElapsed = gameStarted ? (System.nanoTime() - startTime) / 1000000000 : 0;
                 canvas.drawText("FPS: "+Integer.toString(fps),200, screenHeight/2, paint);
-                canvas.drawText("Time: " + Long.toString(time), screenWidth - 400, screenHeight / 2, paint);
+                canvas.drawText("Time: " + Long.toString(timeElapsed), screenWidth - 400, screenHeight / 2, paint);
             }
             else if (playerLose == 1) {
+                //canvas.drawText("PLAYER\nTWO\nWIN!\n\n"+Long.toString(timeElapsed)+" sec", screenWidth/2, screenHeight/2,paint);
                 loseA.draw(canvas);
             }
         }
