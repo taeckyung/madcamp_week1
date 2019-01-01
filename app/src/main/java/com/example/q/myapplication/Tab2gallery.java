@@ -76,6 +76,14 @@ public class Tab2gallery extends Fragment {
                 startActivity(i);
             }
         });
+
+    gallery.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+            return false;
+        }
+    });
         btn_fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
