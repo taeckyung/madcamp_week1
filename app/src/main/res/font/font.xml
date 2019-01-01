@@ -5,4 +5,9 @@
         android:fontWeight="400"
         android:font="@font/track" />
 
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/dohyeon" />
+
 </font-family>

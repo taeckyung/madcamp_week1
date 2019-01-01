@@ -80,6 +80,7 @@ public class GameEngine {
     public boolean checkEnd(){
         int bombNotFound=BOMB_NUMBER;
         int notRevealed = WIDTH * HEIGHT ;
+        int flag = BOMB_NUMBER;
         for ( int x = 0; x < WIDTH; x++){
             for ( int y =0 ; y<HEIGHT ; y++){
                 if( getCellAt(x,y).isRevealed() || getCellAt(x,y).isFlagged() ){
@@ -87,6 +88,9 @@ public class GameEngine {
                 }
                 if(getCellAt(x,y).isFlagged() && getCellAt(x,y).isBomb()){
                     bombNotFound--;
+                }
+                if(getCellAt(x,y).isFlagged()){
+                    flag--;
                 }
             }
         }
@@ -98,7 +102,7 @@ public class GameEngine {
             MineSweeper.count.cancel();
 
         }
-        MineSweeper.bomb.setText(bombNotFound + "");
+        MineSweeper.bomb.setText(flag + "");
 
         return false;
     }

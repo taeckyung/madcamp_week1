@@ -30,7 +30,6 @@ public class MineSweeper extends Activity {
         timer = findViewById(R.id.timer);
         win = findViewById(R.id.win);
         lose = findViewById(R.id.lose);
-
         animationView = findViewById(R.id.animation_view);
         loseanimation = findViewById(R.id.lose_animation);
         win.bringToFront() ;
@@ -41,14 +40,18 @@ public class MineSweeper extends Activity {
         bomb.setText(GameEngine.BOMB_NUMBER + "");
         animationView.setAnimation("confetti_blast.json");
         loseanimation.setAnimation("uh_oh.json");
+        if(count!=null){
+            count.cancel();
+        }
         count = new CountDownTimer(100000, 1000){
             @Override
             public void onTick(long millisUntilFinished) {
-                timer.setText("" + millisUntilFinished / 1000);
                 remain = millisUntilFinished/1000;
+                timer.setText(remain+"");
             }
             @Override
             public void onFinish() {
+                count.cancel();
                 timer.setText(0);
                 GameEngine.getInstance().onGameLost();
             }

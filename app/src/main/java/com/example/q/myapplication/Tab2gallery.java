@@ -91,20 +91,21 @@ public class Tab2gallery extends Fragment {
                 if (i.resolveActivity(getActivity().getPackageManager()) != null) {
                     String fileName = "temp.jpg";
                     ContentValues values = new ContentValues();
-                    values.put(MediaStore.Images.Media.TITLE, fileName);
-                    uri = getActivity().getContentResolver()
-                            .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                    values);
-                    i.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                    startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
-                    adapter= new ImageAdapter(getActivity());
-                    gallery.setAdapter(adapter);
+                    if(!values.equals(null)){
+                        values.put(MediaStore.Images.Media.TITLE, fileName);
+                        uri = getActivity().getContentResolver()
+                                .insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                        values);
+                        i.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
+                        adapter= new ImageAdapter(getActivity());
+                        gallery.setAdapter(adapter);}
                 }
             }
         });
+
         return view;
     }
-
 
 
     public class ImageAdapter extends BaseAdapter {
