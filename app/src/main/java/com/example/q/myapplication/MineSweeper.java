@@ -24,9 +24,7 @@ public class MineSweeper extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("game","intent는 받아왔니");
         getIntent();
-        Log.e("game","intent는 받아왔니2");
         setContentView(R.layout.activity_mine_sweeper);
         bomb = findViewById(R.id.bomb);
         timer = findViewById(R.id.timer);

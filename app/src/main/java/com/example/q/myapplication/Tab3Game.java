@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 public class Tab3Game extends Fragment {
 
@@ -15,14 +16,14 @@ public class Tab3Game extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    Button mine;
+    FrameLayout mine;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab3etc, container, false);
+        View rootView = inflater.inflate(R.layout.tab3game, container, false);
 
-        mine = rootView.findViewById(R.id.startmine);
+        mine = rootView.findViewById(R.id.frame2);
 
         mine.setOnClickListener(new View.OnClickListener() {
             @Override
