@@ -94,8 +94,12 @@ public class GameEngine {
             MineSweeper.win.setVisibility(View.VISIBLE);
             MineSweeper.animationView.setVisibility(View.VISIBLE);
             MineSweeper.animationView.playAnimation();
+            MineSweeper.timer.setText(MineSweeper.remain+"");
+            MineSweeper.count.cancel();
+
         }
         MineSweeper.bomb.setText(bombNotFound + "");
+
         return false;
     }
 
@@ -116,6 +120,8 @@ public class GameEngine {
                 getCellAt(x, y).setRevealed();
             }
         }
-    }
+        MineSweeper.timer.setText(MineSweeper.remain+"");
+        MineSweeper.count.cancel();
 
+    }
 }
