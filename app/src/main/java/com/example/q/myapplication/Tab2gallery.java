@@ -100,7 +100,6 @@ public class Tab2gallery extends Fragment {
                         startActivityForResult(i, REQUEST_IMAGE_CAPTURE);
                         adapter= new ImageAdapter(getActivity());
                         gallery.setAdapter(adapter);}
-
                 }
             }
         });

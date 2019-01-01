@@ -23,7 +23,7 @@ public class Tab3Game extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab3game, container, false);
 
-        mine = rootView.findViewById(R.id.frame2);
+        mine = rootView.findViewById(R.id.frame1);
 
         mine.setOnClickListener(new View.OnClickListener() {
             @Override
