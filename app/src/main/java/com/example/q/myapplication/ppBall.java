@@ -38,15 +38,6 @@ public class ppBall extends CharacterSprite {
     }
 
     public void update(CharacterSprite plateA, CharacterSprite plateB) {
-        xVelocity = xVelocity > maxVelocity ? maxVelocity : xVelocity;
-        xVelocity = xVelocity < -maxVelocity ? -maxVelocity : xVelocity;
-        yVelocity = yVelocity > maxVelocity ? maxVelocity : yVelocity;
-        yVelocity = yVelocity < -maxVelocity ? -maxVelocity : yVelocity;
-
-        x += xVelocity;
-        y += yVelocity;
-
-
         if (!hadCollideRightWall && (x >= screenWidth - radius)) {
             xVelocity *= -1;
             hadCollideRightWall = true;
@@ -95,6 +86,13 @@ public class ppBall extends CharacterSprite {
                 hadCollideRightWall = false;
             }
         }
+        xVelocity = xVelocity > maxVelocity ? maxVelocity : xVelocity;
+        xVelocity = xVelocity < -maxVelocity ? -maxVelocity : xVelocity;
+        yVelocity = yVelocity > maxVelocity ? maxVelocity : yVelocity;
+        yVelocity = yVelocity < -maxVelocity ? -maxVelocity : yVelocity;
+
+        x += xVelocity;
+        y += yVelocity;
     }
 
     public int gameOver() {
