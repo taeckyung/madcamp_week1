@@ -36,6 +36,7 @@ public class Full_Image extends AppCompatActivity {
         Glide.with(this).load(images.get(id)).apply(new RequestOptions()
                 .placeholder(R.drawable.ic_launcher_foreground).fitCenter())
                 .into(imageView);
+
         imageView.setAdjustViewBounds(true);
         imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
     }

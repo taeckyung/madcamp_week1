@@ -2,10 +2,7 @@ package com.example.q.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,13 +13,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -160,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     Tab2gallery tab2= new Tab2gallery();
                     return tab2;
                 case 2:
-                    Tab3etc tab3= new Tab3etc();
+                    Tab3Game tab3= new Tab3Game();
                     return tab3;
                 default:
                     return null;
