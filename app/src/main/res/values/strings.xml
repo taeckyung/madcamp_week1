@@ -9,4 +9,5 @@
     <string name="email_text">E-mail:</string>
     <string name="search_hint">Search...</string>
     <string name="delete">×</string>
+    <string name="pingpong">Pingpong</string>
 </resources>
