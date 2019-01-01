@@ -2,29 +2,6 @@
 <android.support.percent.PercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-<<<<<<< HEAD
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Tab3Game">
-
-    <Button
-        android:id="@+id/startmine"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/button_shape"
-        android:fontFamily="@font/track"
-        android:text="지뢰찾기"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.107"
-        tools:ignore="MissingConstraints" />
-=======
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
@@ -35,8 +12,6 @@
         android:layout_width="match_parent">
 
     </FrameLayout>
->>>>>>> pingpong
-
     <FrameLayout
         android:id="@+id/frame2"
         android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 public class Tab3Game extends Fragment {
 
@@ -15,24 +16,27 @@ public class Tab3Game extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    Button mine;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tab3etc, container, false);
+        View rootView = inflater.inflate(R.layout.tab3game, container, false);
 
-        mine = rootView.findViewById(R.id.startmine);
-
-        mine.setOnClickListener(new View.OnClickListener() {
+        FrameLayout frame1 = rootView.findViewById(R.id.frame1);
+        frame1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), MineSweeper.class);
-                Log.e("onclick","intent");
-                startActivity(i);
-                Log.e("onclick","sAct");
+                Intent intent = new Intent(getActivity(), MineSweeper.class);
+                startActivity(intent);
             }
+        });
 
+        FrameLayout frame2 = rootView.findViewById(R.id.frame2);
+        frame2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), PingPong.class);
+                startActivity(intent);
+            }
         });
         return rootView;
     }
