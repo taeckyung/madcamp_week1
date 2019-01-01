@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_CONTACTS,
                                     Manifest.permission.READ_CONTACTS,
                                     Manifest.permission.CALL_PHONE},
                             MY_PERMISSIONS_REQUEST);
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return "GALLERY";
                 case 2:
-                    return "ETC";
+                    return "GAME";
             }
             return null;
         }
