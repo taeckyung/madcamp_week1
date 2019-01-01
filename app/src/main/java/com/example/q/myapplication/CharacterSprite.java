@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 public class CharacterSprite {
     protected Bitmap image;
     protected int x, y;
+    protected int xVelocity, yVelocity;
 
     public CharacterSprite(Bitmap bmp) {
         image = bmp;
@@ -14,6 +15,8 @@ public class CharacterSprite {
 
     public void draw(Canvas canvas) {
         canvas.drawBitmap(image, x - image.getWidth()/2, y - image.getHeight()/2, null);
+        xVelocity = 0;
+        yVelocity = 0;
     }
 
     public void setXY(int x_, int y_) {
@@ -21,8 +24,15 @@ public class CharacterSprite {
         y = y_;
     }
 
+    public void setVelocity(int xV, int yV) {
+        xVelocity = xV;
+        yVelocity = yV;
+    }
+
     public int getX() { return x; }
     public int getY() { return y; }
+    public int getXVelocity() {return xVelocity;}
+    public int getYVelocity() {return yVelocity;}
     public int getHeight() { return image.getHeight(); }
     public int getWidth() { return image.getWidth(); }
 

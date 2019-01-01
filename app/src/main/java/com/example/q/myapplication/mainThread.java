@@ -13,7 +13,7 @@ public class mainThread extends Thread {
     private boolean running;
     public static Canvas canvas;
 
-    private int targetFPS = 60;
+    private int targetFPS = 30;
     private double averageFPS;
 
 

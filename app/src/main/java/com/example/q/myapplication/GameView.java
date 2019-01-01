@@ -12,6 +12,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.VelocityTracker;
 
 import static com.example.q.myapplication.mainThread.canvas;
 import static java.lang.Thread.sleep;
@@ -27,6 +28,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private boolean onPlateB;
     private int idPlateA;
     private int idPlateB;
+    private VelocityTracker velocityTracker;
     private Paint paint;
     private Paint paintBig;
 
@@ -60,15 +62,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         paintBig = new Paint();
         paintBig.setColor(Color.WHITE);
         paintBig.setTextSize(200);
-        paintBig.setTypeface(Typeface.MONOSPACE);
+        paintBig.setTypeface(Typeface.SANS_SERIF);
 
         setFocusable(true);
     }
 
     public void init_game() {
         ball.setXY(screenWidth/2, screenHeight/2);
+        ball.init();
         plateA.setXY(screenWidth/2, screenHeight - 200);
+        plateA.setVelocity(0, 0);
         plateB.setXY(screenWidth/2, 200);
+        plateB.setVelocity(0, 0);
         onPlateA = false;
         onPlateB = false;
         gameStarted = false;
@@ -141,13 +146,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (playerLose != 0) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 playerLose = 0;
             }
             return true;
         }
         else if (!gameStarted) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 gameStarted = true;
                 startTime = System.nanoTime();
             }
@@ -162,17 +167,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                eventX = (int)event.getX();
-                eventY = (int)event.getY();
-                if (plateA.isInside(eventX, eventY)) {
-                    onPlateA = true;
-                    idPlateA = event.getPointerId(0);
-                }
-                else if (plateB.isInside(eventX, eventY)) {
-                    onPlateB = true;
-                    idPlateB = event.getPointerId(0);
-                }
-                break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 for (int i = 0 ; i < pointer_count ; i++) {
                     eventX = (int)event.getX(i);
@@ -180,14 +174,33 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     if (plateA.isInside(eventX, eventY)) {
                         onPlateA = true;
                         idPlateA = event.getPointerId(i);
+                        if (velocityTracker == null) {
+                            velocityTracker = VelocityTracker.obtain();
+                        }
+                        else {
+                            velocityTracker.clear();
+                        }
+                        velocityTracker.addMovement(event);
                     }
                     else if (plateB.isInside(eventX, eventY)) {
                         onPlateB = true;
                         idPlateB = event.getPointerId(i);
+                        if (velocityTracker == null) {
+                            velocityTracker = VelocityTracker.obtain();
+                        }
+                        else {
+                            velocityTracker.clear();
+                        }
+                        velocityTracker.addMovement(event);
                     }
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (onPlateA || onPlateB) {
+                    velocityTracker.addMovement(event);
+                    velocityTracker.computeCurrentVelocity(1000);
+                }
+
                 for (int i = 0 ; i < pointer_count ; i++) {
                     int currId = event.getPointerId(i);
                     eventX = (int)event.getX(i);
@@ -195,24 +208,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                     if (onPlateA && (idPlateA == currId)) {
                         plateA.setXY(eventX, eventY);
+                        int vX = (int)(velocityTracker.getXVelocity(idPlateA));
+                        int vY = (int)(velocityTracker.getYVelocity(idPlateA)*1.5);
+                        vY = vY < 0 ? vY : 0;
+                        plateA.setVelocity(vX, vY);
                     }
                     else if (onPlateB && (idPlateB == currId)) {
                         plateB.setXY(eventX,eventY);
+                        int vX = (int)(velocityTracker.getXVelocity(idPlateB));
+                        int vY = (int)(velocityTracker.getYVelocity(idPlateB)*1.5);
+                        vY = vY > 0 ? vY : 0;
+                        plateB.setVelocity(vX, vY);
                     }
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                for (int i = 0 ; i < pointer_count ; i++) {
-                    int currId = event.getPointerId(i);
-
-                    if (onPlateA && (idPlateA == currId)) {
-                        onPlateA = false;
-                    }
-                    else if (onPlateB && (idPlateB == currId)) {
-                        onPlateB = false;
-                    }
-                }
-                break;
             case MotionEvent.ACTION_POINTER_UP:
                 for (int i = 0 ; i < pointer_count ; i++) {
                     int currId = event.getPointerId(i);
@@ -223,6 +233,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     else if (onPlateB && (idPlateB == currId)) {
                         onPlateB = false;
                     }
+                }
+                if (!onPlateA && !onPlateB && (velocityTracker != null)) {
+                    velocityTracker.recycle();
+                    velocityTracker = null;
                 }
                 break;
 
