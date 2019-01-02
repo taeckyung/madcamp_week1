@@ -35,7 +35,7 @@ public class Cell extends BaseCell implements View.OnClickListener, View.OnLongC
 
     @Override
     public boolean onLongClick(View v) {
-        if(!isClicked()) {
+        if( !isClicked()){
             GameEngine.getInstance().flag(getXpos(), getYpos());
             GameEngine.getInstance().checkEnd();
         }

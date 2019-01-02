@@ -62,9 +62,8 @@ public class GameEngine {
     }
 
     public void click ( int x, int y){
-        if ( x>=0 && y>=0 && x<WIDTH && y<HEIGHT && !getCellAt(x,y).isClicked() ){
+        if ( x>=0 && y>=0 && x<WIDTH && y<HEIGHT && !getCellAt(x,y).isClicked() && !getCellAt(x,y).isFlagged() ){
             getCellAt(x,y).setClicked();
-
             if( getCellAt(x,y).getValue()==0){
                 for ( int xt=-1; xt<=1; xt++){
                     for( int yt =-1; yt<=1; yt++){
@@ -101,6 +100,7 @@ public class GameEngine {
             MineSweeper.timer.setText(MineSweeper.remain+"");
             MineSweeper.count.cancel();
 
+
         }
         MineSweeper.bomb.setText(flag + "");
 
@@ -122,7 +122,9 @@ public class GameEngine {
         for ( int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 getCellAt(x, y).setRevealed();
-            }
+                getCellAt(x,y).setClicked();
+                }
+
         }
         MineSweeper.timer.setText(MineSweeper.remain+"");
         MineSweeper.count.cancel();
